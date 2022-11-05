@@ -10,9 +10,9 @@ public class NeatLogger {
 
     private static final String fileName = "neatLog.txt";
 
-    private int linesSinceLastSpaceWasAdded = 1;
+    public boolean addEmptyLineNextTime = false;
 
-    public NeatLogger(){
+    public NeatLogger() {
         try {
             File myObj = new File(fileName);
             if (myObj.createNewFile()) {
@@ -30,7 +30,7 @@ public class NeatLogger {
     }
 
 
-    private void Initialize(){
+    private void Initialize() {
         //Adds all lines in the file to the HashSet
         try {
             FileReader reader = new FileReader(fileName);
@@ -51,36 +51,53 @@ public class NeatLogger {
         }
     }
 
-    public void ReceivedChat(String message){
+    public void ReceivedChat(String message) {
 
 
         //Does not contain dialogue numbers
-        if (!Character.isDigit(message.toCharArray()[1])){
-            write(message + "\n");
+        if (!Character.isDigit(message.toCharArray()[1])) {
+            AddEmptyLineIfTrue();
+
+            write(message);
             return;
         }
 
-        if (Integer.parseInt("" + message.toCharArray()[1]) == 1 && linesSinceLastSpaceWasAdded >= 2
-                && message.toCharArray()[2] == '/'){
-            linesSinceLastSpaceWasAdded = 0;
-            write("\n");
+
+        if (!addedLines.contains(message)) {
+            AddEmptyLineIfTrue();
+            write(message);
+            //Add a space if this was last line in dialogue
+            if (Integer.parseInt("" + message.toCharArray()[1]) == (Integer.parseInt("" + message.toCharArray()[3]))) {
+                addEmptyLineNextTime = true;
+            }
         }
 
 
-        if (addedLines.add(message)){
-            linesSinceLastSpaceWasAdded++;
-            write(message + "\n");
-
-        }
     }
 
-    public void write(String message){
+    public void AddEmptyLineIfTrue(){
+        if (addEmptyLineNextTime){
+            JustWrite("\n");
+            addEmptyLineNextTime = false;
+        }
 
-        addedLines.add(message);
+    }
+
+    public boolean write(String message) {
+
+        if (!addedLines.add(message))
+            return false;
+        message += "\n";
+
+        JustWrite(message);
+        return true;
+    }
+
+    private void JustWrite(String text){
         try {
 
-            FileWriter fw = new FileWriter(fileName,true); //the true will append the new data
-            fw.write(message);//appends the string to the file
+            FileWriter fw = new FileWriter(fileName, true); //the true will append the new data
+            fw.write(text);//appends the string to the file
             fw.close();
 
             //    FileWriter myWriter = new FileWriter(fileName);
