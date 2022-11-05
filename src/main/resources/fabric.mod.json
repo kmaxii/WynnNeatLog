@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "wynnneatlog",
+  "version": "${version}",
+  "name": "Wynnneatlog",
+  "description": "Creates a nice log with only wynncraft dialogue",
+  "authors": [
+    "kmaxi"
+  ],
+  "contact": {
+    "website": "https://voicesofwynn.com/"
+  },
+  "license": "MIT",
+  "icon": "assets/wynnneatlog/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.voicesofwynn.wynnneatlog.wynnneatlog.client.WynnneatlogClient"
+    ],
+    "main": [
+      "com.voicesofwynn.wynnneatlog.wynnneatlog.Wynnneatlog"
+    ]
+  },
+  "mixins": [
+    "wynnneatlog.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.10",
+    "fabric": "*",
+    "minecraft": "1.18.2"
+  }
+}
